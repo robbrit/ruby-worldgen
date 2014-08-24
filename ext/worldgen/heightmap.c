@@ -91,6 +91,33 @@ VALUE each_height(VALUE self) {
   return self;
 }
 
+/**
+ * Get the value of our heightmap at a specified point.
+ */
+VALUE get_at(VALUE self, VALUE vx, VALUE vy) {
+  int x = FIX2INT(vx);
+  int y = FIX2INT(vy);
+  heightmap map = get_heights(self);
+  int size = map.size;
+
+  return ARR(map.heights, x, y);
+}
+
+/**
+ * Set the value of our heightmap at a specified point.
+ */
+VALUE set_at(VALUE self, VALUE vx, VALUE vy, VALUE vheight) {
+  int x = FIX2INT(vx);
+  int y = FIX2INT(vy);
+  double height = NUM2DBL(vheight);
+  heightmap map = get_heights(self);
+  int size = map.size;
+
+  ARR(map.heights, x, y) = height;
+
+  return vheight;
+}
+
 void load_heightmap() {
   VALUE mod, height_map;
 
@@ -101,6 +128,8 @@ void load_heightmap() {
   rb_define_private_method(height_map, "initialize_native", initialize_native, 1);
   rb_define_method(height_map, "num_points", num_points_wrapped, 0);
   rb_define_method(height_map, "each_height", each_height, 0);
+  rb_define_method(height_map, "[]=", get_at, 2);
+  rb_define_method(height_map, "[]=", set_at, 3);
 
   HeightmapData = rb_define_class_under(height_map, "HeightmapData", rb_cObject);
 }

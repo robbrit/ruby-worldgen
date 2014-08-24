@@ -1,7 +1,9 @@
 require 'optparse'
 require "worldgen"
 
-options = {}
+options = {
+  verbose: true
+}
 
 OptionParser.new do |opts|
   opts.on("--heightmap [FILE]", String, "Output a heightmap to FILE") do |file|
@@ -18,6 +20,10 @@ OptionParser.new do |opts|
 
   opts.on("--num-plates [N]", Integer, "Generate N plates") do |n|
     options[:num_plates] = n
+  end
+
+  opts.on("-q", "--quiet", "Disable verbose logging") do |n|
+    options[:verbose] = false
   end
 end.parse!
 
@@ -41,10 +47,10 @@ if options[:platemap]
   end
 
   platemap = Worldgen::PlateMap.new(options[:size])
-  platemap.generate_plates! options[:num_plates]
+  platemap.generate_plates!(options[:num_plates], options[:verbose])
   puts "Converting to height map..."
-  heightmap = platemap.to_height_map
-  render_heightmap heightmap, options[:platemap]
+  heightmap = platemap.to_height_map(0.5)
+  Worldgen::Render.heightmap heightmap, options[:platemap]
 end
 
 puts "Done."

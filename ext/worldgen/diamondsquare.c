@@ -38,9 +38,7 @@ VALUE diamond_square(int argc, VALUE *argv, VALUE self) {
 
   roughness = vroughness == Qnil ? DEFAULT_ROUGHNESS : NUM2DBL(vroughness);
 
-  // need to allocate on the heap since Ruby will throw stack size problems
-  // if we don't
-  heights = (double *)malloc(sizeof(double) * num_points(size));
+  heights = (heightmap_points)malloc(sizeof(double) * num_points(size));
 
   memset(heights, 0.0, sizeof(double) * num_points(size));
 
