@@ -58,21 +58,20 @@ VALUE initialize_native(VALUE self, VALUE vsize) {
 }
 
 /**
- * Free the C side of things in a heightmap
- */
-VALUE finalize_native(VALUE self) {
-  return Qnil;
-}
-
-/**
- * Get the number of points within the heightmap.
+ * Get the number of points within the heightmap. Right now this is a very
+ * simple calculation of size * size.
  */
 VALUE num_points_wrapped(VALUE self) {
   return INT2FIX(num_points(FIX2INT(rb_iv_get(self, "@size"))));
 }
 
 /**
- * Loop over all the points in the heightmap.
+ * Iterate over all the points in the heightmap.
+ * Example:
+ * ```
+ * heightmap.each_height do |x, y, height|
+ *   puts "Height at (#{x}, #{y}) is #{height}"
+ * end
  */
 VALUE each_height(VALUE self) {
   heightmap map = get_heights(self);
@@ -99,8 +98,7 @@ void load_heightmap() {
 
   height_map = rb_define_class_under(mod, "HeightMap", rb_cObject);
 
-  rb_define_method(height_map, "initialize_native", initialize_native, 1);
-  rb_define_method(height_map, "finalize_native", finalize_native, 0);
+  rb_define_private_method(height_map, "initialize_native", initialize_native, 1);
   rb_define_method(height_map, "num_points", num_points_wrapped, 0);
   rb_define_method(height_map, "each_height", each_height, 0);
 

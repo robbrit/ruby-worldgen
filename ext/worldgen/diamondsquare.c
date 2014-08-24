@@ -15,7 +15,14 @@ double diamond_shift(double roughness) {
   return (r * 2.0 - 1.0) * roughness;
 }
 
-/** Generate terrain using a diamond square algorithm. **/
+/**
+ * Generate terrain using a diamond square algorithm.
+ * Arguments:
+ * `heightmap` - The heightmap to use for the algorithm
+ * `roughness` (optional) - How "rough" to make the surface
+ *
+ * Return value: nil
+ **/
 VALUE diamond_square(int argc, VALUE *argv, VALUE self) {
   int x, y;
   double ratio = 500.0;

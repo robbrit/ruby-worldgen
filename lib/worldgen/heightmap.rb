@@ -1,15 +1,18 @@
 module Worldgen
+  # A square heightmap
   class HeightMap
-    attr_reader :size
-
-    def initialize size
-      @size = size
-      ObjectSpace.define_finalizer(self, method(:finalize))
-      initialize_native(size)
+    # A class used internally to manage C-allocated memory
+    class HeightmapData
     end
 
-    def finalize
-      finalize_native
+    attr_reader :size
+
+    # Create a new square heightmap.
+    # Arguments:
+    # * size - the width/height of the map
+    def initialize size
+      @size = size
+      initialize_native(size)
     end
   end
 end

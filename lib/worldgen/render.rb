@@ -1,6 +1,10 @@
 require 'RMagick'
 
 module Worldgen::Render
+  # Render a heightmap to a grayscale file.
+  # Arguments:
+  # * map - The heightmap to render
+  # * filename - The filename to use. Image format will be inferred from the filename
   def self.heightmap map, filename
     # loading each one in is crazy slow, just throw it into a pixel map
     image = Magick::Image.new(map.size, map.size) { self.background_color = "black" }
@@ -14,6 +18,7 @@ module Worldgen::Render
     image.write filename
   end
 
+=begin
   def self.platemap map, filename
     image = Magick::Image.new(map.size, map.size) { self.background_color = "black" }
 
@@ -35,4 +40,5 @@ module Worldgen::Render
     #image.display
     image.write filename
   end
+=end
 end
