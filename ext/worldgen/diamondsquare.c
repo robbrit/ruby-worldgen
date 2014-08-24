@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define DEFAULT_ROUGHNESS 5
+
 extern heightmap get_heights(VALUE);
 extern void set_heights(VALUE, heightmap_points);
 extern int get_size(VALUE);
@@ -26,7 +28,8 @@ VALUE diamond_square(int argc, VALUE *argv, VALUE self) {
     
   size = get_size(heightmap_obj);
   side_size = size - 1;
-  roughness = NUM2DBL(vroughness);
+
+  roughness = vroughness == Qnil ? DEFAULT_ROUGHNESS : NUM2DBL(vroughness);
 
   // need to allocate on the heap since Ruby will throw stack size problems
   // if we don't

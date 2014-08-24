@@ -29,7 +29,7 @@ end
 if options[:heightmap]
   puts "Generating heightmap..."
   heightmap = Worldgen::HeightMap.new(options[:size])
-  Worldgen::Algorithms.diamond_square!(heightmap, 5)
+  Worldgen::Algorithms.diamond_square!(heightmap)
   Worldgen::Render.heightmap heightmap, options[:heightmap]
 end
 
