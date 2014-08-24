@@ -24,7 +24,7 @@ So far there is not much. You can do square heightmaps:
 
 ```ruby
 # Create a 50x50 heightmap - this will be flat
-heightmap = Worldgen::Heightmap.new 50
+heightmap = Worldgen::HeightMap.new 50
 ```
 
 Then you can do a diamond square fractal to it:
