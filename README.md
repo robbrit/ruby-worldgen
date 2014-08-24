@@ -47,8 +47,9 @@ tectonics). Example:
 ```ruby
 # create a 256x256 plate map
 platemap = Worldgen::PlateMap.new 256
-# generate 15 plates
-platemap.generate_plates! 15
+# generate 10 plates
+platemap.generate_plates! 10
+# Output to a PNG - this will show each plate in a different colour
 Worldgen::Render.platemap platemap, "plates.png"
 ```
 

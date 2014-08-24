@@ -184,6 +184,8 @@ module Worldgen
             valid_plates.delete_at idx
             break if valid_plates.length == 0
           else
+            # Did we just consume the last point of this plate?
+            valid_plates.delete_at(idx) if not plate.has_frontier?
             break
           end
         end
