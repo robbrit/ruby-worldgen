@@ -1,0 +1,19 @@
+# Gem/Bundler stuff
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+*.bundle
+*.so
+*.o
+*.a
+Makefile
+mkmf.log
+
+# Vim stuff
+*.sw[op]
