@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-So far there is not much. You can do square heightmaps:
+### Heightmaps
 
 ```ruby
 # Create a 50x50 heightmap - this will be flat
@@ -37,6 +37,19 @@ Then dump it to an image file:
 
 ```ruby
 Worldgen::Render.heightmap heightmap, "output.png"
+```
+
+### Plate Maps
+
+A plate map is a random construction of plates within a world (as in plate
+tectonics). Example:
+
+```ruby
+# create a 256x256 plate map
+platemap = Worldgen::PlateMap.new 256
+# generate 15 plates
+platemap.generate_plates! 15
+Worldgen::Render.platemap platemap, "plates.png"
 ```
 
 ## Contributing

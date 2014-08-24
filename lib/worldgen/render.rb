@@ -14,11 +14,9 @@ module Worldgen::Render
       image.pixel_color x, y, "##{grey}"
     end
 
-    #image.display
     image.write filename
   end
 
-=begin
   def self.platemap map, filename
     image = Magick::Image.new(map.size, map.size) { self.background_color = "black" }
 
@@ -37,8 +35,6 @@ module Worldgen::Render
       end
     end
 
-    #image.display
     image.write filename
   end
-=end
 end

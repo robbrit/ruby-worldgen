@@ -49,8 +49,9 @@ if options[:platemap]
   platemap = Worldgen::PlateMap.new(options[:size])
   platemap.generate_plates!(options[:num_plates], options[:verbose])
   puts "Converting to height map..."
-  heightmap = platemap.to_height_map(0.5)
-  Worldgen::Render.heightmap heightmap, options[:platemap]
+  #heightmap = platemap.to_height_map(0.5)
+  #Worldgen::Render.heightmap heightmap, options[:platemap]
+  Worldgen::Render.platemap platemap, options[:platemap]
 end
 
 puts "Done."
