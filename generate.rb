@@ -22,7 +22,7 @@ OptionParser.new do |opts|
     options[:num_plates] = n
   end
 
-  opts.on("-q", "--quiet", "Disable verbose logging") do |n|
+  opts.on("-q", "--quiet", "Disable verbose logging") do
     options[:verbose] = false
   end
 end.parse!
@@ -47,7 +47,8 @@ if options[:platemap]
   end
 
   platemap = Worldgen::PlateMap.new(options[:size])
-  platemap.generate_plates!(options[:num_plates], options[:verbose])
+  platemap.generate_plates!(options[:num_plates],
+                            verbose: options[:verbose])
   puts "Converting to height map..."
   #heightmap = platemap.to_height_map(0.5)
   #Worldgen::Render.heightmap heightmap, options[:platemap]

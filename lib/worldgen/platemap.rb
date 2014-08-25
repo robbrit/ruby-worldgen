@@ -138,8 +138,12 @@ module Worldgen
     #
     # Arguments:
     # * num_plates - the number of plates to generate
+    #
+    # Options:
     # * verbose (default: true) - output logging while we're generating
-    def generate_plates! num_plates, verbose=true
+    def generate_plates! num_plates, options={}
+      verbose = options[:verbose] || true
+
       @plate_ids = Array.new(@size) { Array.new(@size) { -1 }}
 
       # Initialize plates in random spots
