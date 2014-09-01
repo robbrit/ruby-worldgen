@@ -17,3 +17,6 @@ mkmf.log
 
 # Vim stuff
 *.sw[op]
+
+# Image outputs
+*.png

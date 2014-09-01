@@ -12,5 +12,6 @@ void Init_worldgen() {
 
   load_heightmap();
   load_diamond_square();
+  load_fbm();
   load_random_lattice();
 }

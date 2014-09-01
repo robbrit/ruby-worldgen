@@ -7,8 +7,10 @@
 
 VALUE LatticeClass;
 
-double cubic(int x0, int y0, int x1, int y1, double x, double y) {
-  return 1.0;
+double cubic(double a, double b, double x) {
+  // use cubic interpolation: 3x^2 - 2x^3
+  double f = 3.0 * x * x - 2.0 * x * x * x;
+  return a * (1.0 - f) + b * f;
 }
 
 /** This is a simple rotating hash with a bunch of prime numbers tossed in
@@ -26,17 +28,57 @@ int simple_hash(int * is, int count) {
   return hash % 75327403;
 }
 
+double value_at_int(RandomLattice *lattice, int x, int y) {
+  int is[] = {0, 0, lattice->seed};
+
+  // clamp x/y
+  is[0] = (x + lattice->width) % lattice->width;
+  is[1] = (y + lattice->height) % lattice->height;
+
+  srand(simple_hash(is, 3));
+  return (double)rand() / (RAND_MAX + 1.0);
+}
+
+/**
+ * Do a simple smoothing algorithm with this point and the points around it.
+ */
+double smooth(RandomLattice *lattice, int x, int y) {
+  double corners = (value_at_int(lattice, x - 1, y - 1) +
+                    value_at_int(lattice, x - 1, y + 1) +
+                    value_at_int(lattice, x + 1, y - 1) +
+                    value_at_int(lattice, x + 1, y + 1)) / 16.0;
+  double sides = (value_at_int(lattice, x - 1, y) +
+                  value_at_int(lattice, x + 1, y) +
+                  value_at_int(lattice, x, y - 1) +
+                  value_at_int(lattice, x, y + 1)) / 8.0;
+  double centre = value_at_int(lattice, x, y) / 4.0;
+
+  return corners + sides + centre;
+}
+
 /**
  * Get the random value at point x, y in the lattice.
  */
 double value_at(RandomLattice *lattice, double x, double y) {
-  int ix = (int)x;
-  int iy = (int)y;
-  int is[] = {ix, iy, lattice->seed};
+  // interpolate between points
+  int x0 = (int)x;
+  int y0 = (int)y;
 
-  srand(simple_hash(is, 3));
-  // TODO: interpolation
-  return (double)rand() / (RAND_MAX + 1.0);
+  double fx = x - (double)x0;
+  double fy = y - (double)y0;
+
+  // get the values of the corners
+  double tl = smooth(lattice, x0, y0);
+  double tr = smooth(lattice, x0 + 1, y0);
+  double bl = smooth(lattice, x0, y0 + 1);
+  double br = smooth(lattice, x0 + 1, y0 + 1);
+
+  // interpolate between the two to get the points along the top and bottom
+  double i0 = lattice->interpolate(tl, bl, fy);
+  double i1 = lattice->interpolate(tr, br, fy);
+
+  // interpolate between the points long the y
+  return lattice->interpolate(i0, i1, fx);
 }
 
 /**
@@ -47,6 +89,18 @@ VALUE value_at_wrapped(VALUE self, VALUE x, VALUE y) {
   Data_Get_Struct(self, RandomLattice, lattice);
 
   return DBL2NUM(value_at(lattice, NUM2DBL(x), NUM2DBL(y)));
+}
+
+/** Lattice constructor
+ */
+void create_lattice(RandomLattice *lattice, int width, int height, int seed) {
+  seed = seed < 0 ? time(NULL) : seed;
+
+  lattice->height = height;
+  lattice->width = width;
+  lattice->seed = seed;
+  lattice->dimension = 2;
+  lattice->interpolate = cubic;
 }
 
 /**
@@ -65,15 +119,10 @@ VALUE init_lattice(int argc, VALUE *argv, VALUE self) {
   rb_scan_args(argc, argv, "21", &vwidth, &vheight, &vseed);
   width = FIX2INT(vwidth);
   height = FIX2INT(vheight);
-  printf("%d, %d\n", width, height);
-  seed = vseed == Qnil ? (int)time(NULL) : FIX2INT(vseed);
+  seed = vseed == Qnil ? -1 : FIX2INT(vseed);
 
   Data_Get_Struct(self, RandomLattice, lattice);
-  lattice->height = height;
-  lattice->width = width;
-  lattice->seed = seed;
-  lattice->dimension = 2;
-  lattice->interpolate = cubic;
+  create_lattice(lattice, width, height, seed);
 
   return self;
 }

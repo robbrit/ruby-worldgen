@@ -59,10 +59,10 @@ module Worldgen::Render
 
     stepx = lattice.width.fdiv(width)
     stepy = lattice.height.fdiv(height)
-
-    lattice.each_point(0, 0, width, height, stepx, stepy) do |x, y, point|
-      px = (x * stepx).floor
-      py = (y * stepy).floor
+    
+    lattice.each_point(0, 0, lattice.width, lattice.height, stepx, stepy) do |x, y, point|
+      px = (x / stepx).floor
+      py = (y / stepy).floor
       image.pixel_color px, py, grey(point)
     end
 

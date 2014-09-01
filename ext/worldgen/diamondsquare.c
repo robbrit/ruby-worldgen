@@ -39,7 +39,6 @@ VALUE diamond_square(int argc, VALUE *argv, VALUE self) {
   roughness = vroughness == Qnil ? DEFAULT_ROUGHNESS : NUM2DBL(vroughness);
 
   heights = (heightmap_points)malloc(sizeof(double) * num_points(size));
-
   memset(heights, 0.0, sizeof(double) * num_points(size));
 
   ARR(heights, 0, 0) = ARR(heights, 0, size - 1) =

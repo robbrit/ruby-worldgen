@@ -6,8 +6,12 @@ options = {
 }
 
 OptionParser.new do |opts|
-  opts.on("--heightmap [FILE]", String, "Output a heightmap to FILE") do |file|
-    options[:heightmap] = file
+  opts.on("--diamondsquare [FILE]", String, "Output a diamondsquare to FILE") do |file|
+    options[:diamondsquare] = file
+  end
+
+  opts.on("--fbm [FILE]", String, "Output a fbm to FILE") do |file|
+    options[:fbm] = file
   end
 
   opts.on("--platemap [FILE]", String, "Output a platemap to FILE") do |file|
@@ -36,11 +40,11 @@ if not options[:size]
   exit
 end
 
-if options[:heightmap]
-  puts "Generating heightmap..."
+if options[:diamondsquare]
+  puts "Generating heightmap with diamond square..."
   heightmap = Worldgen::HeightMap.new(options[:size])
   Worldgen::Algorithms.diamond_square!(heightmap)
-  Worldgen::Render.heightmap heightmap, options[:heightmap]
+  Worldgen::Render.heightmap heightmap, options[:diamondsquare]
 end
 
 if options[:platemap]
@@ -63,7 +67,14 @@ if options[:lattice]
   size = options[:size]
   lattice = Worldgen::RandomLattice.new(size, size)
 
-  Worldgen::Render.lattice lattice, options[:lattice]
+  Worldgen::Render.lattice lattice, options[:lattice], 256, 256
+end
+
+if options[:fbm]
+  puts "Generating heightmap with FBM..."
+  heightmap = Worldgen::HeightMap.new(options[:size])
+  Worldgen::Algorithms.fbm!(heightmap, 4)
+  Worldgen::Render.heightmap heightmap, options[:fbm]
 end
 
 puts "Done."
