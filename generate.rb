@@ -14,6 +14,10 @@ OptionParser.new do |opts|
     options[:platemap] = file
   end
 
+  opts.on("--lattice [FILE]", String, "Output a lattice to FILE") do |file|
+    options[:lattice] = file
+  end
+
   opts.on("--size N", Integer, "Generate a map of size 2^N + 1") do |n|
     options[:size] = 2**n + 1
   end
@@ -53,6 +57,13 @@ if options[:platemap]
   #heightmap = platemap.to_height_map(0.5)
   #Worldgen::Render.heightmap heightmap, options[:platemap]
   Worldgen::Render.platemap platemap, options[:platemap]
+end
+
+if options[:lattice]
+  size = options[:size]
+  lattice = Worldgen::RandomLattice.new(size, size)
+
+  Worldgen::Render.lattice lattice, options[:lattice]
 end
 
 puts "Done."

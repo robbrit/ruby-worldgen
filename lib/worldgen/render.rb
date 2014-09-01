@@ -10,8 +10,7 @@ module Worldgen::Render
     image = Magick::Image.new(map.size, map.size) { self.background_color = "black" }
 
     map.each_height do |x, y, pix_height|
-      grey = ("%2X" % (pix_height * 255).round) * 3
-      image.pixel_color x, y, "##{grey}"
+      image.pixel_color x, y, grey(pix_height)
     end
 
     image.write filename
@@ -43,5 +42,36 @@ module Worldgen::Render
     end
 
     image.write filename
+  end
+
+  # Render a lattice to a file.
+  #
+  # Arguments:
+  # * lattice - the latice to render
+  # * filename - the file to output to
+  # * width (optional) - the width of the image
+  # * height (optional) - the height of the image
+  def self.lattice lattice, filename, width=nil, height=nil
+    width = width || lattice.width
+    height = height || lattice.height
+
+    image = Magick::Image.new(width, height) { self.background_color = "black" }
+
+    stepx = lattice.width.fdiv(width)
+    stepy = lattice.height.fdiv(height)
+
+    lattice.each_point(0, 0, width, height, stepx, stepy) do |x, y, point|
+      px = (x * stepx).floor
+      py = (y * stepy).floor
+      image.pixel_color px, py, grey(point)
+    end
+
+    image.write filename
+  end
+
+private
+  # Convert a number in [0, 1) to the grey hex code
+  def self.grey float
+    "##{("%2X" % (float * 256).floor) * 3}"
   end
 end
