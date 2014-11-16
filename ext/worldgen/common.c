@@ -4,8 +4,16 @@
  * Convert an array of doubles into normalized doubles between 0 and 1
  **/
 void normalize(double * values, int size) {
+  normalize_range(values, size, 0.0, 1.0);
+}
+
+/**
+ * Convert an array of doubles into normalized doubles on a specified range
+ */
+void normalize_range(double * values, int size, double rmin, double rmax) {
   double min = values[0],
-         max = values[0];
+         max = values[0],
+         range = rmax - rmin;
 
   int x;
 
@@ -19,7 +27,7 @@ void normalize(double * values, int size) {
   }
 
   for (x = 0; x < num_points(size); x++) {
-    values[x] = (values[x] - min) / (max - min);
+    values[x] = (values[x] - min) / (max - min) * range + rmin;
   }
 }
 

@@ -10,16 +10,12 @@ OptionParser.new do |opts|
     options[:diamondsquare] = file
   end
 
-  opts.on("--fbm [FILE]", String, "Output a fbm to FILE") do |file|
-    options[:fbm] = file
-  end
-
   opts.on("--platemap [FILE]", String, "Output a platemap to FILE") do |file|
     options[:platemap] = file
   end
 
-  opts.on("--lattice [FILE]", String, "Output a lattice to FILE") do |file|
-    options[:lattice] = file
+  opts.on("--perlin [FILE]", String, "Output a perlin noise to FILE") do |file|
+    options[:perlin] = file
   end
 
   opts.on("--size N", Integer, "Generate a map of size 2^N + 1") do |n|
@@ -63,18 +59,11 @@ if options[:platemap]
   Worldgen::Render.platemap platemap, options[:platemap]
 end
 
-if options[:lattice]
+if options[:perlin]
   size = options[:size]
-  lattice = Worldgen::RandomLattice.new(size, size)
+  perlin = Worldgen::Perlin.new(size, size)
 
-  Worldgen::Render.lattice lattice, options[:lattice], 256, 256
-end
-
-if options[:fbm]
-  puts "Generating heightmap with FBM..."
-  heightmap = Worldgen::HeightMap.new(options[:size])
-  Worldgen::Algorithms.fbm!(heightmap, 4)
-  Worldgen::Render.heightmap heightmap, options[:fbm]
+  Worldgen::Render.perlin perlin, options[:perlin], size, size
 end
 
 puts "Done."

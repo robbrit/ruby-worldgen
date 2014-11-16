@@ -12,5 +12,6 @@ typedef struct {
 
 int num_points(int);
 void normalize(double *, int);
+void normalize_range(double *, int, double, double);
 
 #endif // COMMON_H__

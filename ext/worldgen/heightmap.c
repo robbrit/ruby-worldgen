@@ -118,6 +118,27 @@ VALUE set_at(VALUE self, VALUE vx, VALUE vy, VALUE vheight) {
   return vheight;
 }
 
+/**
+ * Normalize the heightmap to be between a specified range. The default range
+ * is from 0 to 1.
+ * Arguments:
+ * * min - Minimum value for normalization (default 0).
+ * * max - Maximum value for normalization (default 1).
+ */
+VALUE normalize_hm(int argc, VALUE *argv, VALUE self) {
+  heightmap map = get_heights(self);
+  VALUE vmin, vmax;
+  double min, max;
+
+  rb_scan_args(argc, argv, "02", &vmin, &vmax);
+
+  min = vmin == Qnil ? 0.0 : NUM2DBL(vmin);
+  max = vmax == Qnil ? 1.0 : NUM2DBL(vmax);
+
+  normalize_range(map.heights, map.size, min, max);
+  return self;
+}
+
 void load_heightmap() {
   VALUE mod, height_map;
 
@@ -130,6 +151,7 @@ void load_heightmap() {
   rb_define_method(height_map, "each_height", each_height, 0);
   rb_define_method(height_map, "[]=", get_at, 2);
   rb_define_method(height_map, "[]=", set_at, 3);
+  rb_define_method(height_map, "normalize!", normalize_hm, -1);
 
   HeightmapData = rb_define_class_under(height_map, "HeightmapData", rb_cObject);
 }

@@ -69,6 +69,17 @@ module Worldgen::Render
     image.write filename
   end
 
+  # Render perlin noies
+  #
+  # Arguments:
+  # * noise - the noise object to render
+  # * filename - the filename to output to
+  # * width - the width of the image
+  # * height - the height of the image
+  def self.perlin p, filename, width=256, height=256
+    heightmap p.to_heightmap(width, height), filename
+  end
+
 private
   # Convert a number in [0, 1) to the grey hex code
   def self.grey float

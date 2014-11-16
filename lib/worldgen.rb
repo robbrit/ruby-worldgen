@@ -1,5 +1,6 @@
 require "worldgen/version"
 require "worldgen/heightmap"
+require "worldgen/perlin"
 require "worldgen/platemap"
 require "worldgen/randomlattice"
 require "worldgen/render"

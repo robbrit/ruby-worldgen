@@ -27,12 +27,6 @@ Or install it yourself as:
 heightmap = Worldgen::HeightMap.new 50
 ```
 
-Then you can do a diamond square fractal to it:
-
-```ruby
-Worldgen::Algorithms.diamond_square! heightmap
-```
-
 Then dump it to an image file:
 
 ```ruby
@@ -51,6 +45,17 @@ platemap = Worldgen::PlateMap.new 256
 platemap.generate_plates! 10
 # Output to a PNG - this will show each plate in a different colour
 Worldgen::Render.platemap platemap, "plates.png"
+```
+
+### Perlin Noise
+
+This feature is experimental and may be subject to change in the near future.
+
+```ruby
+# Create the noise object
+noise = Worldgen::Perlin.new(256, 256)
+# Draw it
+Worldgen::Render.perlin noise, "noise.png"
 ```
 
 ## Contributing
